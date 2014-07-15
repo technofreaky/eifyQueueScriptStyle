@@ -30,12 +30,11 @@ class eify_QueueScriptStyles {
 	 * @param string $handle
 	 * @param string $src
 	 * @param string | int  $version
-	 * @param array $page
 	 * @param array $attr
 	 * @param boolean $footer
 	 * @return boolean
 	 */
-	private function enqueue($type,$handle,$src,$version,$page = '',$attr = '',$footer = false) {
+	private function enqueue($type,$handle,$src,$version,$attr = '',$footer = false) {
 		if(!empty($src)) {
 			if(!array_key_exists($handle, $this->{$type})) {
 				$this->{$type}[$handle] = array();
@@ -43,9 +42,7 @@ class eify_QueueScriptStyles {
 				$this->{$type}[$handle]['handler'] = $handle;
 				$this->{$type}[$handle]['src'] = $src;
 				$this->{$type}[$handle]['version'] = $version;
-				
-				if(!empty($page) && is_array($page)) { $this->{$type}[$handle]['page'] = $page; }
-		
+
 				if(!empty($attr) && is_array($attr)) { $this->{$type}[$handle]['attr'] = $attr; }				
 				
 				$this->{$type}[$handle]['is_footer'] = $footer;
@@ -138,8 +135,8 @@ class eify_QueueScriptStyles {
 	 * @param boolean $footer
 	 * @return boolean
 	 */
-	public function script_enqueue($handle,$src,$version,$page = '',$footer = false) {
-		return $this->enqueue('script',$handle,$src,$version,$page,$footer);
+	public function script_enqueue($handle,$src,$version,$footer = false) {
+		return $this->enqueue('script',$handle,$src,$version,$footer);
 	}
 
 	/**
@@ -153,8 +150,8 @@ class eify_QueueScriptStyles {
 	 * @param boolean $footer
 	 * @return boolean
 	 */
-	public function style_enqueue($handle,$src,$version,$page = '',$footer = false) { 
-		return $this->enqueue('style',$handle,$src,$version,$page,$footer);	
+	public function style_enqueue($handle,$src,$version,$footer = false) { 
+		return $this->enqueue('style',$handle,$src,$version,$footer);	
 	}	
 	
 	/**
