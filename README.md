@@ -49,13 +49,13 @@ Other Options
 ### Check For Existing In Script / Style
 ```php
 var_dump($queue->has_script('jQuery'));
-var_dump($queue->has_script('jQueryCss'));
+var_dump($queue->has_style('jQueryCss'));
 ```
 
 ### Remove A Script / Style From Queue 
 ```php
 $queue->dequeue_script('jQuery);
-$queue->dequeue_style(jQueryCss);
+$queue->dequeue_style('jQueryCss');
 ```
 
 
