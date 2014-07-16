@@ -45,6 +45,19 @@ echo $queue->get_style(true) ;
 
 Other Options
 =============
+### Adding Script / Style dependency
+```PHP
+$queue->script_enqueue('jQueryui','jQueryui.min.js','1.11.0','jQuery','',false);
+$queue->script_enqueue('jQuery','jQuery.min.js','1.11.0','','',false);
+
+$queue->style_enqueue('jQueryuicss','jQueryui.min.css','1.11.0','jQuery','',false);
+$queue->style_enqueue('jQuerycss','jQuery.min.css','1.11.0','','',false);
+```
+### Custom Attributes
+```php
+$attr = array('SHOW' => 'HIDE','WHAT' => 'NONE');
+$queue->script_enqueue('jQueryMobile','jquery.mobile.min.js','1.11.0','jQuery','',$aatt,false);
+```
 
 ### Check For Existing In Script / Style
 ```php
@@ -54,7 +67,7 @@ var_dump($queue->has_style('jQueryCss'));
 
 ### Remove A Script / Style From Queue 
 ```php
-$queue->dequeue_script('jQuery);
+$queue->dequeue_script('jQuery');
 $queue->dequeue_style('jQueryCss');
 ```
 
