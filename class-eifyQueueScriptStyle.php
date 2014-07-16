@@ -19,12 +19,14 @@
 * @package eify_QueueScriptStyles
 */
 
-class eify_QueueScriptStyles {
+class eify_QueueScriptStyles{
 	
 	protected $style =  array();
 	protected $script = array();
-        protected $generated = array();
-        protected $depended = array();
+	protected $generated = array();
+	protected $depended_script = array();
+	protected $depended_style = array();
+	public $currentPage = '';
 	
 	/**
 	 * Enqueue A Script / Style Based On The Input Given
@@ -39,6 +41,7 @@ class eify_QueueScriptStyles {
 	 */
 	private function enqueue($type,$handle,$src,$version,$dependency= '',$page = '',$attr = '',$footer = false) {
 		if(!empty($src)) {
+			 
 			if(!array_key_exists($handle, $this->{$type})) {
 				$this->{$type}[$handle] = array();
 				$this->{$type}[$handle] = array();
@@ -114,11 +117,11 @@ class eify_QueueScriptStyles {
      */
     private function generateTag($type,$footer,$val){ 
         if(isset($val['page']) && is_array($val['page'])){
-            if(!in_array($currPage, $val['page'])) {
+            if(isset($this->currentPage) && !in_array($this->currentPage, $val['page'])) {
                 continue;
             }
         } else if(isset($val['page']) && is_string($val['page'])){
-            if($currPage !== $val['page']) {
+            if($this->currentPage !== $val['page']) {
                 continue;
             }
         }
@@ -130,10 +133,10 @@ class eify_QueueScriptStyles {
             }
 
             if($type == 'style') {
-                $tag = '<link  rel="stylesheet" href="'.$val['src'].'"?v='.$val['version'].' '.$attr.' />'.PHP_EOL;
+                $tag = '<link  rel="stylesheet" href="'.$val['src'].'?v='.$val['version'].'" '.$attr.' />'.PHP_EOL;
             } else if ($type = 'script') {
-                $tag = '<script src="'.$val['src'].'"?v='.$val['version'];
-                $tag .= ' type="text/javascript" '.$attr.'> </script>'.PHP_EOL ;
+                $tag = '<script src="'.$val['src'].'?v='.$val['version'];
+                $tag .= '"  type="text/javascript" '.$attr.'> </script>'.PHP_EOL ;
             }
             return $tag;
         }        
@@ -142,17 +145,17 @@ class eify_QueueScriptStyles {
     /**
      * Checks For Dependency
      */ 
-    private function checkDepn($val){ 
+    private function checkDepn($type,$val){ 
         if(isset($val['dependency']) && !empty($val['dependency'])) {
             if(! in_array($val['dependency'], $this->generated)){ 
                 $tempArr = array();
                 $tempArr['handler'] = $val['handler'];
                 $tempArr['dependency'] = $val['dependency'];
-                if(!isset($this->depended[$val['handler']]))
+                if(!isset($this->{"depended_".$type}[$val['handler']]))
                     $this->depended[$val['handler']] = $tempArr;
                     $generate = false;
             } else {  
-                unset($this->depended[$val['handler']]);
+                unset($this->{"depended_".$type}[$val['handler']]);
                 $generate = true;
             }
         } else { 
@@ -167,14 +170,15 @@ class eify_QueueScriptStyles {
      * Checks for dependency to load
      */
     private function checkLoad($type,$footer){
-        $data = $this->depended;
+    	
+        $data = $this->{"depended_".$type};
         $type = $type;
         $tags = '';
         foreach($data as $key => $value) {  
             $val = $this->{$type}[$value['handler']];
             if($this->checkDepn($val)) {  
-                unset($this->depended[$key]);
-                $tags .= $this->generateTag($type,$footer,$this->{$type}[$value['handler']]);
+                unset($this->{"depended_".$type}[$key]);
+                $tags .= $this->generateTag($type,$footer,$this->{$type}[$value['handler']],$this->currentPage);
                 $this->generated[] = $value['handler'];
             } else { 
                continue;
@@ -193,16 +197,17 @@ class eify_QueueScriptStyles {
 	public function generate($type,$footer = false) {
 		$data = $this->{$type};
 		$generated_{$type} = '';
+        $this->currentPage = requestHander();
         
 	 	if(!empty($data)) {
-			$currPage = '';
-
+ 
 			foreach($data as $key => $val) {  
                 
                 $generate = true;
-                $generate = $this->checkDepn($val);
+                $generate = $this->checkDepn($type,$val);
                 
 				if($generate){
+					
 				    $generated_{$type} .= $this->generateTag($type,$footer,$val);
 					$this->generated[] = $val['handler'];
                     $check = $this->checkLoad($type,$footer);
@@ -212,7 +217,7 @@ class eify_QueueScriptStyles {
                 }
             }
                     
-            $reCount = count($this->depended);
+            $reCount = count($this->{"depended_".$type});
             $i = 0;
             while($i<$reCount) {
                 $check = $this->checkLoad($type,$footer);
