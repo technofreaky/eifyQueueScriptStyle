@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Eify Queue Script Style by eMailify</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/eMailify/eifyQueueScriptStyle">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/eMailify/eifyQueueScriptStyle/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/eMailify/eifyQueueScriptStyle/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Eify Queue Script Style</h1>
+          <p>This is class is a clone of  wordpress wp_enqueue_script / wp_enqueue_style</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/eMailify">eMailify</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="how-to-use-it" class="anchor" href="#how-to-use-it"><span class="octicon octicon-link"></span></a>How To Use It</h1>
+
+<p>Step 1 : Include the file in your application [bootstrap / load / anywhere you need ] and initiate the class </p>
+
+<div class="highlight highlight-php"><pre><span class="k">require</span><span class="p">(</span><span class="s1">'class-eifyQueueScriptStyle.php'</span><span class="p">);</span>
+<span class="nv">$queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">eify_QueueScriptStyle</span><span class="p">;</span>
+</pre></div>
+
+<h3>
+<a name="step-2--add-a-script-to-queue" class="anchor" href="#step-2--add-a-script-to-queue"><span class="octicon octicon-link"></span></a>Step 2 : Add A Script To Queue</h3>
+
+<pre><code>Options [
+     HandlerName : Some Name For The Enqued Script
+     SRC : File URL
+     Version : Script Version
+     Footer : if need to show in footer { TRUE | FALSE }
+]
+
+script_enqueue($handle,$src,$version,$footer = false)
+
+</code></pre>
+
+<div class="highlight highlight-php"><pre><span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">script_enqueue</span><span class="p">(</span><span class="s1">'jQuery'</span><span class="p">,</span><span class="s1">'jQuery.js'</span><span class="p">,</span><span class="s1">'1.0'</span><span class="p">,</span><span class="k">true</span><span class="p">);</span>
+<span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">style_enqueue</span><span class="p">(</span><span class="s1">'jQueryCss'</span><span class="p">,</span><span class="s1">'jQuery.css'</span><span class="p">,</span><span class="s1">'1.0'</span><span class="p">,</span><span class="k">false</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="step-3--generate-html" class="anchor" href="#step-3--generate-html"><span class="octicon octicon-link"></span></a>Step 3 : Generate HTML</h3>
+
+<pre><code>Options [
+     footer : True / False [ Get Only Footer Script / Styles]
+]
+</code></pre>
+
+<div class="highlight highlight-php"><pre><span class="k">echo</span> <span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">get_script</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">get_style</span><span class="p">(</span><span class="k">true</span><span class="p">)</span> <span class="p">;</span>
+</pre></div>
+
+<h1>
+<a name="other-options" class="anchor" href="#other-options"><span class="octicon octicon-link"></span></a>Other Options</h1>
+
+<h3>
+<a name="adding-script--style-dependency" class="anchor" href="#adding-script--style-dependency"><span class="octicon octicon-link"></span></a>Adding Script / Style dependency</h3>
+
+<div class="highlight highlight-PHP"><pre><span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">script_enqueue</span><span class="p">(</span><span class="s1">'jQueryui'</span><span class="p">,</span><span class="s1">'jQueryui.min.js'</span><span class="p">,</span><span class="s1">'1.11.0'</span><span class="p">,</span><span class="s1">'jQuery'</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="k">false</span><span class="p">);</span>
+<span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">script_enqueue</span><span class="p">(</span><span class="s1">'jQuery'</span><span class="p">,</span><span class="s1">'jQuery.min.js'</span><span class="p">,</span><span class="s1">'1.11.0'</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="k">false</span><span class="p">);</span>
+
+<span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">style_enqueue</span><span class="p">(</span><span class="s1">'jQueryuicss'</span><span class="p">,</span><span class="s1">'jQueryui.min.css'</span><span class="p">,</span><span class="s1">'1.11.0'</span><span class="p">,</span><span class="s1">'jQuery'</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="k">false</span><span class="p">);</span>
+<span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">style_enqueue</span><span class="p">(</span><span class="s1">'jQuerycss'</span><span class="p">,</span><span class="s1">'jQuery.min.css'</span><span class="p">,</span><span class="s1">'1.11.0'</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="k">false</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="custom-attributes" class="anchor" href="#custom-attributes"><span class="octicon octicon-link"></span></a>Custom Attributes</h3>
+
+<div class="highlight highlight-php"><pre><span class="nv">$attr</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">'SHOW'</span> <span class="o">=&gt;</span> <span class="s1">'HIDE'</span><span class="p">,</span><span class="s1">'WHAT'</span> <span class="o">=&gt;</span> <span class="s1">'NONE'</span><span class="p">);</span>
+<span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">script_enqueue</span><span class="p">(</span><span class="s1">'jQueryMobile'</span><span class="p">,</span><span class="s1">'jquery.mobile.min.js'</span><span class="p">,</span><span class="s1">'1.11.0'</span><span class="p">,</span><span class="s1">'jQuery'</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="nv">$aatt</span><span class="p">,</span><span class="k">false</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="check-for-existing-in-script--style" class="anchor" href="#check-for-existing-in-script--style"><span class="octicon octicon-link"></span></a>Check For Existing In Script / Style</h3>
+
+<div class="highlight highlight-php"><pre><span class="nb">var_dump</span><span class="p">(</span><span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">has_script</span><span class="p">(</span><span class="s1">'jQuery'</span><span class="p">));</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">has_style</span><span class="p">(</span><span class="s1">'jQueryCss'</span><span class="p">));</span>
+</pre></div>
+
+<h3>
+<a name="remove-a-script--style-from-queue" class="anchor" href="#remove-a-script--style-from-queue"><span class="octicon octicon-link"></span></a>Remove A Script / Style From Queue</h3>
+
+<div class="highlight highlight-php"><pre><span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">dequeue_script</span><span class="p">(</span><span class="s1">'jQuery'</span><span class="p">);</span>
+<span class="nv">$queue</span><span class="o">-&gt;</span><span class="na">dequeue_style</span><span class="p">(</span><span class="s1">'jQueryCss'</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="if-you-need-help" class="anchor" href="#if-you-need-help"><span class="octicon octicon-link"></span></a>If You Need Help</h2>
+
+<p>Please submit all issues and questions using GitHub issues and I will try to help you :)</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-55772181-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
